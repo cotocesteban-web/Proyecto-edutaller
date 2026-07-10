@@ -47,10 +47,14 @@ export default function RegisterRequest() {
   useEffect(() => {
     axios.get('/api/auth/courses')
       .then(res => {
-        setCourses(res.data);
-        if (res.data.length > 0 && !courseId) {
-          // Si no hay parámetro de curso, seleccionar el primero de la lista
-          setCourseId(res.data[0].id.toString());
+        if (Array.isArray(res.data)) {
+          setCourses(res.data);
+          if (res.data.length > 0 && !courseId) {
+            // Si no hay parámetro de curso, seleccionar el primero de la lista
+            setCourseId(res.data[0].id.toString());
+          }
+        } else {
+          setCourses([]);
         }
       })
       .catch(err => {

@@ -93,8 +93,12 @@ export default function Home() {
       axios.get('/api/auth/settings')
     ])
       .then(([coursesRes, settingsRes]) => {
-        setCourses(coursesRes.data);
-        if (settingsRes.data) {
+        if (Array.isArray(coursesRes.data)) {
+          setCourses(coursesRes.data);
+        } else {
+          setCourses([]);
+        }
+        if (settingsRes.data && typeof settingsRes.data === 'object' && !Array.isArray(settingsRes.data)) {
           setInstSettings(prev => ({ ...prev, ...settingsRes.data }));
         }
         setLoading(false);
